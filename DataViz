@@ -1,0 +1,26 @@
+from google.colab import files
+uploaded = files.upload()
+import pandas as pd
+df = pd.read_csv('ecdc-covid19-cases-csv-2.csv')
+df.head()
+X=df.drop(columns=['countriesAndTerritories'])
+Y=df['countriesAndTerritories']
+
+SEED=42
+from sklearn.model_selection import train_test_split
+X_train, Y_train, X_test, Y_test = train_test_split(X,Y, test_size=0.3, random_state=SEED)
+X_train.shape, X_test.shape
+X_train_c = X_train.copy()
+X_train_c.info()
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+fig,ax = plt.subplots(1,2, figsize=(10,5))
+
+sns.histplot(data=X_train_c, x='continentExp', ax=ax[0]);
+sns.ecdfplot(data=X_train_c, y='popData2018', ax=ax[1]);
+
+fig,ax = plt.subplots(1,2, figsize=(10,5))
+
+sns.boxplot(data=X_train_c, x='day',ax=ax[0])
+sns.countplot(data=X_train_c, y='month',ax=ax[1])
